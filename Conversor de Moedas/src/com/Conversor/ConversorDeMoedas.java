@@ -9,24 +9,23 @@ import com.google.gson.Gson;
 
 public class ConversorDeMoedas {
 
-    private static final String API_URL_TEMPLATE = "https://v6.exchangerate-api.com/v6/" +
-            "6ac6142476d18f09e81912b1/latest/";
-    private final HttpClient cliente;
+    private static final String MODELO_URL_API = "https://v6.exchangerate-api.com/v6/6ac6142476d18f09e81912b1/latest/";
+    private final HttpClient clienteHttp;
     private final Gson gson;
 
     public ConversorDeMoedas() {
-        this.cliente = HttpClient.newHttpClient();
+        this.clienteHttp = HttpClient.newHttpClient();
         this.gson = new Gson();
     }
 
     public TaxasCambio obterTaxasCambio(String base) throws Exception {
-        String url = API_URL_TEMPLATE + base;
+        String url = MODELO_URL_API + base;
         HttpRequest requisicao = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
                 .build();
 
-        HttpResponse<String> resposta = cliente.send(requisicao, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> resposta = clienteHttp.send(requisicao, HttpResponse.BodyHandlers.ofString());
 
         if (resposta.statusCode() == 200) {
             return gson.fromJson(resposta.body(), TaxasCambio.class);
@@ -62,33 +61,33 @@ public class ConversorDeMoedas {
 
     public void realizarConversao(int escolha, double quantidade) {
         try {
-            TaxasCambio taxas = obterTaxasCambio("USD");
+            TaxasCambio taxasUSD = obterTaxasCambio("USD");
             switch (escolha) {
                 case 1:
                     System.out.println(quantidade + " Dólar(es) é igual a "
-                            + (quantidade * taxas.getRates().getBRL()) + " Real(is).");
+                            + (quantidade * taxasUSD.getTaxas().getBRL()) + " Real(is).");
                     break;
                 case 2:
                     System.out.println(quantidade + " Real(is) é igual a "
-                            + (quantidade / taxas.getRates().getBRL()) + " Dólar(es).");
+                            + (quantidade / taxasUSD.getTaxas().getBRL()) + " Dólar(es).");
                     break;
                 case 3:
                     System.out.println(quantidade + " Dólar(es) é igual a "
-                            + (quantidade * taxas.getRates().getEUR()) + " Euro(s).");
+                            + (quantidade * taxasUSD.getTaxas().getEUR()) + " Euro(s).");
                     break;
                 case 4:
                     TaxasCambio taxasEUR = obterTaxasCambio("EUR");
                     System.out.println(quantidade + " Euro(s) é igual a "
-                            + (quantidade * taxasEUR.getRates().getUSD()) + " Dólar(es).");
+                            + (quantidade * taxasEUR.getTaxas().getUSD()) + " Dólar(es).");
                     break;
                 case 5:
                     System.out.println(quantidade + " Dólar(es) é igual a "
-                            + (quantidade * taxas.getRates().getCNY()) + " Yuan.");
+                            + (quantidade * taxasUSD.getTaxas().getCNY()) + " Yuan.");
                     break;
                 case 6:
                     TaxasCambio taxasCNY = obterTaxasCambio("CNY");
                     System.out.println(quantidade + " Yuan é igual a "
-                            + (quantidade * taxasCNY.getRates().getUSD()) + " Dólar(es).");
+                            + (quantidade * taxasCNY.getTaxas().getUSD()) + " Dólar(es).");
                     break;
                 default:
                     System.out.println("Escolha inválida.");

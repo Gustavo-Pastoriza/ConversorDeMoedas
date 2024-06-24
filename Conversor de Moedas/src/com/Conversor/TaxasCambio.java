@@ -2,18 +2,18 @@ package com.Conversor;
 
 public class TaxasCambio {
     private String base_code;
-    private Cotacoes rates;
+    private Cotacoes conversion_rates;
 
-    public String getBaseCode() {
+    public String getCodigoBase() {
         return base_code;
     }
 
-    public Cotacoes getRates() {
-        return rates;
+    public Cotacoes getTaxas() {
+        return conversion_rates;
     }
 
     @Override
     public String toString() {
-        return "Base Code: " + base_code + ", Rates: " + rates;
+        return "Código Base: " + base_code + ", Taxas: " + conversion_rates;
     }
 }

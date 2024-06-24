@@ -4,7 +4,7 @@ public class Cotacoes {
     private double BRL;
     private double EUR;
     private double CNY;
-    private double USD; // Necessário para conversão de outras moedas para USD
+    private double USD;
 
     public double getBRL() {
         return BRL;
